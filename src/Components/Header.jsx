@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+import { useNavigate } from 'react-router-dom';
+import { TokenAuthContext } from '../contexts/TokenAuth';
 
 function Header({insideDashBoard}) {
+
+const{isAuthorised,setIsAuthorised} =useContext(TokenAuthContext)
+  const navigate = useNavigate()
+const logout =()=>{
+  sessionStorage.clear()
+  setIsAuthorised(false)
+  navigate('/')
+
+}
+
   return (
     <>
        <Navbar className="bg-primary shadow">
@@ -14,7 +26,7 @@ function Header({insideDashBoard}) {
           </Navbar.Brand>
           { insideDashBoard &&
           <div className='ms-auto'>
-            <button className='btn btn-link'>Logout<i className='fa-solid fa-arrow-right'></i></button>
+            <button onClick={logout} className='btn btn-link'>Logout<i className='fa-solid fa-arrow-right'></i></button>
 
           </div>
 

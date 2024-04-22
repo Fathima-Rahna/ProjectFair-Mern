@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import Idea from '../assets/upload.png'
  import {SERVER_URL} from '../services/serverUrl';
  import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { editprojectAPI } from '../services/allAPI';
+import { editResponseContext } from '../contexts/ContextAPI';
 
 
 
 function Edit({project}) {
   console.log(project);
+  const {editResponse,setEditResponse} = useContext(editResponseContext)
   const [projectData,setProjectData] =useState({
   id:project?._id,title:project?.title,language:project?.language,overview:project?.overview,github:project?.github,website:project?.website,projectImage:""
   })
@@ -33,9 +35,12 @@ setProjectData({ id:project?._id,title:project?.title,language:project?.language
 })
   setPreview("")
 }
-const handleShow = () => setShow(true);
+const handleShow = () => {
+  setShow(true);
+  setProjectData({ id:project?._id,title:project?.title,language:project?.language,overview:project?.overview,github:project?.github,website:project?.website,projectImage:""
+})
 
-
+}
 const handleUpdateProject = async ()=>{
   const {title,language,overview,github,website,projectImage} = projectData
   if(!title || !language || !overview || !github || !website){
@@ -62,6 +67,7 @@ const handleUpdateProject = async ()=>{
           if(result.status==200){
             handleClose()
             //pass response view
+            setEditResponse(result)
           }else{
               console.log(result.response);
           }

@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loginAPI, registerAPI } from '../services/allAPI';
+import { TokenAuthContext } from '../contexts/TokenAuth';
 
 
 
 function Auth({insideRegister }) {
+  const{isAuthorised,setIsAuthorised} =useContext(TokenAuthContext)
   const navigate = useNavigate()
   const [userInputs,setUserInputs] = useState({
     username:"" ,email:"",password:""
@@ -63,6 +65,7 @@ function Auth({insideRegister }) {
 
           sessionStorage.setItem("exstingUser",JSON.stringify(result.data.existingUser))
           sessionStorage.setItem("token",result.data.token)
+          setIsAuthorised(true)
          toast.warning(`Welcome ${result.data.existingUser.username}...`)
          setUserInputs({username:"",email:"",password:""})
          setTimeout(()=>{
